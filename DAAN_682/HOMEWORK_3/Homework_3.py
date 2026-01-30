@@ -31,31 +31,33 @@ summary_stats = mtcars.describe()
 
 #high level overview of the data before conducting the statistical analysis
 print("A high level overview of the data is listed below: \n")
-print(mtcars.info())
+mtcars.info()
 
 print(f"Summary_stats of mtcars are listed below. These summary stats include:mean, std., min, max, and quartiles. \n {summary_stats}")
 results = []
-for column in mtcars.columns:
+for column in mtcars:
     max_idx = mtcars[column].idxmax()
     max_value = mtcars[column].max()
     model_name = mtcars.loc[max_idx, "model"]
     results.append({"Column": column, "Model": model_name, "Max_value": max_value})
-    
+print("here are the max vlaues for each of the indexes, along with the corresponding model")
 print(pd.DataFrame(results))
-#print(f"The location of min values for each of the columns is: {mtcars.min()} and is located at: {mtcars.idxmin()}")
-#print(f"The location of max values for each of the columns is located at: {mtcars.idxmax()}")
+correlation_matrix = mtcars.drop(columns="model").corr()
+print(f"the correlation martix is given by: {correlation_matrix}")
 
-
+for col in correlation_matrix.columns:
+    row = correlation_matrix[col].drop(col)
+    top_var = row.idxmax()
+    top_corr = row[top_var]
+    print(f"{col} is most closely correlated with {top_var}, with a correlatoin of {top_corr}")
+    
 
 #5. 
 #removing the first row and first column
-mtcars_edited = mtcars.drop("model", axis=1)
-correlation = mtcars_edited.corr()
-#print(f"the correlation martix is given by: {correlation}")
 
 most_corr ={}
 corr_value ={}
 
-for row in correlation.index:
-    row_corr =correlation.loc[row].drop(row)
-    max_var = correlation.idxmax()
+#for row in correlation.index:
+#    row_corr =correlation.loc[row].drop(row)
+#    max_var = correlation.idxmax()
