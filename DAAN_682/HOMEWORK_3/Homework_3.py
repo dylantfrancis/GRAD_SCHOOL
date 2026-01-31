@@ -27,37 +27,58 @@ os.chdir(path)
 mtcars = pd.read_csv("mtcars.csv")
 
 #2
-summary_stats = mtcars.describe()
-
 #high level overview of the data before conducting the statistical analysis
 print("A high level overview of the data is listed below: \n")
 mtcars.info()
 
-print(f"Summary_stats of mtcars are listed below. These summary stats include:mean, std., min, max, and quartiles. \n {summary_stats}")
+#summary statistics
+print(f"Summary_stats of mtcars are listed below. These summary stats include:mean, std., min, max, and quartiles. \n {mtcars.describe()}")
+
 results = []
 for column in mtcars:
     max_idx = mtcars[column].idxmax()
     max_value = mtcars[column].max()
     model_name = mtcars.loc[max_idx, "model"]
     results.append({"Column": column, "Model": model_name, "Max_value": max_value})
-print("here are the max vlaues for each of the indexes, along with the corresponding model")
+print("Here are the max vlaues for each of the indexes, along with the corresponding model")
 print(pd.DataFrame(results))
+
+
+#finding the highest correlation for each variable 
 correlation_matrix = mtcars.drop(columns="model").corr()
-print(f"the correlation martix is given by: {correlation_matrix}")
+print(f"The correlation martix is given by: {correlation_matrix}")
 
 for col in correlation_matrix.columns:
     row = correlation_matrix[col].drop(col)
     top_var = row.idxmax()
     top_corr = row[top_var]
-    print(f"{col} is most closely correlated with {top_var}, with a correlatoin of {top_corr}")
+    print(f"{col} has the highest positive correlation with {top_var}, with a correlatoin of {top_corr}")
     
+#3 
+group_by_variable_3 = 'gear'
+mpg_stats = mtcars.groupby(group_by_variable_3)['mpg'].agg(['mean', 'median', 'min', 'max'])
+print(mpg_stats)
 
-#5. 
-#removing the first row and first column
+counter = pd.Series(0, index=mpg_stats.index)
+for col in mpg_stats.columns:
+    idx = mpg_stats[col].idxmax()
+    counter[idx]+=1
+print(f"The {mpg_stats.index.name} with that produces the best MPG is {mpg_stats.index.name}: {counter.idxmax()}")
 
-most_corr ={}
-corr_value ={}
+# #4
+group_by_variable_4 = 'carb'
+mpg_stats = mtcars.groupby(group_by_variable_4)['mpg'].agg(['mean', 'median', 'min', 'max'])
+print(mpg_stats)
 
-#for row in correlation.index:
-#    row_corr =correlation.loc[row].drop(row)
-#    max_var = correlation.idxmax()
+counter = pd.Series(0, index=mpg_stats.index)
+for col in mpg_stats.columns:
+    idx = mpg_stats[col].idxmax()
+    counter[idx]+=1
+print(f"The {mpg_stats.index.name} with that produces the best MPG is {mpg_stats.index.name}: {counter.idxmax()}")
+
+#5 
+# this should be the similar to the calcualtion in number 2 excpet I need to account for absoutle value
+correlation_edits = mtcars.drop(columns=['model']).corr().abs()['mpg'].sort_values(ascending=False)
+
+print(f"The attritube that contributes the most to mpg is {correlation_edits.index[1]} with a correlation value of: {correlation_edits.iloc[1]}")
+

@@ -42,7 +42,7 @@ print("The location of the min number in the flatted .randn matrix is: ", np.arg
 
 # 2.1) 
 print("Problem: 2.1\n")
-x = np.random.randint(0, 1000, size = (4, 4))
+x = np.random.randint(0, 1000, size = (10, 10))
 print(x)
 
 even_counter = 0
@@ -56,13 +56,15 @@ print(f"There are {even_counter} even numbers in this array \n")
 #2.2)
 print("Problem: 2.2\n")
 array = np.random.normal(loc=1.0, scale=0.5, size=(8, 9))
-        
+
+x=0
 value_sum =0
 for i, row in enumerate(array):
     for j, value in enumerate(row):
         if (i+j) % 5 == 0:
+            x+=1
             value_sum+=value
-
-print(f"\n The sum of the values at the indexes whose sum is divisible by 5 is: {value_sum}")
+mean = value_sum / x
+print(f"\n The sum of the values at the indexes whose sum is divisible by 5 is: {mean}")
             
 
